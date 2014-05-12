@@ -9,19 +9,20 @@
 class Solution {
 public:
     ListNode *reverseBetween(ListNode *head, int m, int n) {
-    	ListNode *p, *q, *t;
-    	ListNode *front, *back;
-    	front = head;
-    	for(int i = 1; i < m-1; ++i)
-    		front = front->next;
-    	p = NULL;
-    	q = front->next;
-    	for(int i = 0; i < n-m+1; ++i){
-    		t = q->next;
-    		q->next = p;
-    		p = q;
-    		q = t;
-    	}
-    	return p;
+        if(m == n) return head;
+        ListNode root(0);
+        root.next = head;
+        ListNode* p = &root;
+        for(int i = 1; i < m; ++i) p = p->next;
+        ListNode* tail = p, *newtail = p->next;
+        p = p->next, tail->next = NULL;
+        for(int i = 0; i <= n - m; ++i){
+            ListNode *t = p->next;
+            p->next = tail->next;
+            tail->next = p;
+            p = t;
+        }
+        newtail->next = p;
+    	return root.next;
     }
 };
