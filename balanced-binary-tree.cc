@@ -1,37 +1,19 @@
-#include <iostream>
-using namespace std;
-
-/**
- * Definition for binary tree
- **/
-struct TreeNode {
- 	int val;
- 	TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
- 
 class Solution {
 public:
-	static const int INF = 0x3f3f3f3f;
-	int minDepthD(TreeNode *node){
-		int depthL = INF, depthR = INF;
-		if(node->left == NULL && node->right == NULL)
-			return 1;
+	bool isBalanced(TreeNode *node, int& depth){
+		int heightL = 0, heightR = 0;
 		if(node->left !=NULL )
-			depthL = minDepthD(node->left);
+			if(!isBalanced(node->left, heightL))
+				return false;
 		if(node->right !=NULL )
-			depthR = minDepthD(node->right);
-		return min(depthL, depthR) + 1;
+			if(!isBalanced(node->right, heightR))
+				return false;
+		depth = max(heightL, heightR) + 1;
+		return heightL - heightR >=-1 && heightL - heightR <=1;
 	}
-    int minDepth(TreeNode *root) {
-    	return (root == NULL) ? 0 : minDepthD(root);
+
+    bool isBalanced(TreeNode *root) {
+    	int depth;
+    	return root == NULL || isBalanced(root, depth);
     }
 };
-
-int main(){
-	Solution solution;
-	TreeNode node[] = { TreeNode(1), TreeNode(2)} ;
-	node[0].left = &node[1];
-	cout << solution.minDepth(&node[0]) << endl;
-}
